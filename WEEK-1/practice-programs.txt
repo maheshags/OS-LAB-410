@@ -1,0 +1,290 @@
+1>find the second smallest number
+
+
+#include <stdio.h>
+
+int findSecondSmallest(int arr[], int size) {
+    if (size < 2) {
+        printf("Array should have at least two elements.\n");
+        return -1;
+    }
+
+    int smallest = arr[0];
+    int secondSmallest = arr[1];
+
+    if (smallest > secondSmallest) {
+        int temp = smallest;
+        smallest = secondSmallest;
+        secondSmallest = temp;
+    }
+
+    for (int i = 2; i < size; i++) {
+        if (arr[i] < smallest) {
+            secondSmallest = smallest;
+            smallest = arr[i];
+        }
+        else if (arr[i] < secondSmallest && arr[i] != smallest) {
+            secondSmallest = arr[i];
+        }
+    }
+
+    return secondSmallest;
+}
+
+int main() {
+    int size;
+
+    printf("Enter the size of the array: ");
+    scanf("%d", &size);
+
+    if (size < 2) {
+        printf("Array must have at least two elements.\n");
+        return 0;
+    }
+
+    int arr[size];
+
+    printf("Enter the elements of the array: \n");
+    for (int i = 0; i < size; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    int result = findSecondSmallest(arr, size);
+    if (result != -1) {
+        printf("The second smallest element is: %d\n", result);
+    }
+
+    return 0;
+}
+
+
+
+2>count the duplicate numbers
+
+
+
+#include <stdio.h>
+
+int countDuplicates(int arr[], int size) {
+    int count = 0;
+
+    for (int i = 0; i < size; i++) {
+        for (int j = i + 1; j < size; j++) {
+            if (arr[i] == arr[j]) {
+                count++;
+                break;
+            }
+        }
+    }
+
+    return count;
+}
+
+int main() {
+    int size;
+
+    printf("Enter the size of the array: ");
+    scanf("%d", &size);
+
+    int arr[size];
+
+    printf("Enter the elements of the array: \n");
+    for (int i = 0; i < size; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    int result = countDuplicates(arr, size);
+    printf("Total number of duplicate elements: %d\n", result);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+3> find the second largest number
+
+
+#include <stdio.h>
+
+int findSecondLargest(int arr[], int size) {
+    int largest = arr[0];
+    int secondLargest = arr[1];
+
+    if (largest < secondLargest) {
+        int temp = largest;
+        largest = secondLargest;
+        secondLargest = temp;
+    }
+
+    for (int i = 2; i < size; i++) {
+        if (arr[i] > largest) {
+            secondLargest = largest;
+            largest = arr[i];
+        }
+        else if (arr[i] > secondLargest && arr[i] != largest) {
+            secondLargest = arr[i];
+        }
+    }
+
+    return secondLargest;
+}
+
+int main() {
+    int size;
+
+    printf("Enter the size of the array: ");
+    scanf("%d", &size);
+
+    int arr[size];
+
+    printf("Enter the elements of the array: \n");
+    for (int i = 0; i < size; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    int result = findSecondLargest(arr, size);
+    printf("The second largest element is: %d\n", result);
+
+    return 0;
+}
+
+
+4>delete the element i the array at given position
+
+
+
+#include <stdio.h>
+
+void deleteElement(int arr[], int *size, int position) {
+    for (int i = position; i < *size - 1; i++) {
+        arr[i] = arr[i + 1];
+    }
+    (*size)--;
+}
+
+int main() {
+    int size, position;
+
+    printf("Enter the size of the array: ");
+    scanf("%d", &size);
+
+    int arr[size];
+
+    printf("Enter the elements of the array: \n");
+    for (int i = 0; i < size; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    printf("Enter the position of the element to delete: ");
+    scanf("%d", &position);
+
+    if (position >= 0 && position < size) {
+        deleteElement(arr, &size, position);
+        printf("Array after deletion: \n");
+        for (int i = 0; i < size; i++) {
+            printf("%d ", arr[i]);
+        }
+        printf("\n");
+    } else {
+        printf("Invalid position\n");
+    }
+
+    return 0;
+}
+
+
+5>Write a program in C to find the sum of rows and columns of a matrix
+
+
+
+#include <stdio.h>
+
+int main() {
+    int rows, cols, sum = 0;
+
+    printf("Enter the number of rows: ");
+    scanf("%d", &rows);
+
+    printf("Enter the number of columns: ");
+    scanf("%d", &cols);
+
+    int matrix[rows][cols];
+
+    printf("Enter the elements of the matrix: \n");
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+
+    if (rows == cols) {
+        for (int i = 0; i < rows; i++) {
+            sum += matrix[i][i];
+        }
+        printf("Sum of the left diagonal: %d\n", sum);
+    } else {
+        printf("Matrix is not square, left diagonal does not exist.\n");
+    }
+
+    return 0;
+}
+
+
+6>Write a program in C to find the sum of rows and columns of a matrix.
+
+
+
+
+#include <stdio.h>
+
+int main() {
+    int rows, cols;
+
+    printf("Enter the number of rows: ");
+    scanf("%d", &rows);
+
+    printf("Enter the number of columns: ");
+    scanf("%d", &cols);
+
+    int matrix[rows][cols];
+    int rowSum[rows], colSum[cols];
+
+    printf("Enter the elements of the matrix: \n");
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+
+    for (int i = 0; i < rows; i++) {
+        rowSum[i] = 0;
+        for (int j = 0; j < cols; j++) {
+            rowSum[i] += matrix[i][j];
+        }
+    }
+
+    for (int j = 0; j < cols; j++) {
+        colSum[j] = 0;
+        for (int i = 0; i < rows; i++) {
+            colSum[j] += matrix[i][j];
+        }
+    }
+
+    printf("Sum of rows: \n");
+    for (int i = 0; i < rows; i++) {
+        printf("Row %d: %d\n", i + 1, rowSum[i]);
+    }
+
+    printf("Sum of columns: \n");
+    for (int j = 0; j < cols; j++) {
+        printf("Column %d: %d\n", j + 1, colSum[j]);
+    }
+
+    return 0;
+}
