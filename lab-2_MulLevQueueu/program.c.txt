@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 100
+
+struct Process {
+    int process_id;
+    int burst_time;
+    char type[10];
+};
+
+void calculateTimes(struct Process proc[], int n) {
+    int waiting_time = 0, turn_around_time = 0;
+    printf("Process ID\tBurst Time\tWaiting Time\tTurnaround Time\n");
+    for (int i = 0; i < n; i++) {
+        waiting_time += proc[i].burst_time;
+        turn_around_time = waiting_time + proc[i].burst_time;
+        printf("%d\t\t%d\t\t%d\t\t%d\n", proc[i].process_id, proc[i].burst_time, waiting_time, turn_around_time);
+    }
+}
+
+void fcfs(struct Process proc[], int n) {
+    printf("\nExecuting FCFS Scheduling\n");
+    calculateTimes(proc, n);
+}
+
+void sortProcesses(struct Process proc[], int n) {
+    struct Process temp;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (strcmp(proc[i].type, "system") == 0 && strcmp(proc[j].type, "user") == 0) {
+                temp = proc[i];
+                proc[i] = proc[j];
+                proc[j] = temp;
+            }
+        }
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    struct Process proc[MAX];
+
+    for (int i = 0; i < n; i++) {
+        printf("\nEnter Process ID for Process %d: ", i + 1);
+        scanf("%d", &proc[i].process_id);
+
+        printf("Enter Burst Time for Process %d: ", i + 1);
+        scanf("%d", &proc[i].burst_time);
+
+        printf("Enter Process Type (system/user) for Process %d: ", i + 1);
+        scanf("%s", proc[i].type);
+    }
+
+    sortProcesses(proc, n);
+
+    struct Process system_proc[MAX], user_proc[MAX];
+    int system_count = 0, user_count = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (strcmp(proc[i].type, "system") == 0) {
+            system_proc[system_count++] = proc[i];
+        } else {
+            user_proc[user_count++] = proc[i];
+        }
+    }
+
+    if (system_count > 0) {
+        printf("\nSystem Processes FCFS Scheduling:\n");
+        fcfs(system_proc, system_count);
+    } else {
+        printf("\nNo System Processes to schedule.\n");
+    }
+
+    if (user_count > 0) {
+        printf("\nUser Processes FCFS Scheduling:\n");
+        fcfs(user_proc, user_count);
+    } else {
+        printf("\nNo User Processes to schedule.\n");
+    }
+
+    return 0;
+}
