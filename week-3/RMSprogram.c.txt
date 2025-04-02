@@ -1,0 +1,58 @@
+#include <stdio.h>
+
+#define MAX 10
+
+typedef struct {
+    int id, exec, period, rem, deadline;
+} Task;
+
+int gcd(int a, int b) { return b == 0 ? a : gcd(b, a % b); }
+int lcm(int a, int b) { return (a * b) / gcd(a, b); }
+
+int hyper_period(Task t[], int n) {
+    int hp = t[0].period;
+    for (int i = 1; i < n; i++) hp = lcm(hp, t[i].period);
+    return hp;
+}
+
+int get_highest(Task t[], int n) {
+    int high = -1;
+    for (int i = 0; i < n; i++)
+        if (t[i].rem > 0 && (high == -1 || t[i].period < t[high].period))
+            high = i;
+    return high;
+}
+
+void rms(Task t[], int n, int hp) {
+    printf("\nTime\tTask\n");
+    for (int i = 0; i < n; i++) t[i].rem = t[i].exec;
+    
+    for (int time = 0; time < hp; time++) {
+        for (int i = 0; i < n; i++)
+            if (time % t[i].period == 0) t[i].rem = t[i].exec;
+        
+        int id = get_highest(t, n);
+        if (id != -1) {
+            printf("%d\tT%d\n", time, t[id].id);
+            t[id].rem--;
+        } else printf("%d\tIDLE\n", time);
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter number of tasks: ");
+    scanf("%d", &n);
+    Task t[MAX];
+    
+    for (int i = 0; i < n; i++) {
+        printf("Enter execution time and period for Task %d: ", i + 1);
+        scanf("%d %d", &t[i].exec, &t[i].period);
+        t[i].id = i + 1;
+    }
+
+    int hp = hyper_period(t, n);
+    printf("Hyper-period: %d\n", hp);
+    rms(t, n, hp);
+    return 0;
+}

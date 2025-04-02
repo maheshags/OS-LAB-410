@@ -1,0 +1,63 @@
+#include <stdio.h>
+
+#define MAX 10
+
+typedef struct {
+    int id, burst_time, deadline, rem, arrival_time;
+} Task;
+
+int get_earliest_deadline(Task t[], int n) {
+    int min_deadline = -1;
+    for (int i = 0; i < n; i++) {
+        if (t[i].rem > 0 && (min_deadline == -1 || t[i].deadline < t[min_deadline].deadline)) {
+            min_deadline = i;
+        }
+    }
+    return min_deadline;
+}
+
+void edf(Task t[], int n, int total_time) {
+    printf("\nTime\tTask\n");
+    for (int i = 0; i < n; i++) {
+        t[i].rem = t[i].burst_time;
+    }
+
+    for (int time = 0; time < total_time; time++) {
+        for (int i = 0; i < n; i++) {
+            if (time == t[i].arrival_time) {
+                t[i].rem = t[i].burst_time;
+            }
+        }
+
+        int task_id = get_earliest_deadline(t, n);
+
+        if (task_id != -1 && t[task_id].rem > 0) {
+            printf("%d\tP%d\n", time, t[task_id].id);
+            t[task_id].rem--;
+        } else {
+            printf("%d\tIDLE\n", time);
+        }
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter number of tasks: ");
+    scanf("%d", &n);
+    
+    Task t[MAX];
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter Process ID, Burst Time, Deadline, and Arrival Time for Task %d: ", i + 1);
+        scanf("%d %d %d %d", &t[i].id, &t[i].burst_time, &t[i].deadline, &t[i].arrival_time);
+    }
+
+    int total_time = 0;
+    for (int i = 0; i < n; i++) {
+        total_time = total_time > t[i].deadline ? total_time : t[i].deadline;
+    }
+
+    printf("Total simulation time: %d\n", total_time);
+    edf(t, n, total_time);
+    return 0;
+}
