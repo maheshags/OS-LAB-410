@@ -1,0 +1,48 @@
+#include <stdio.h>
+
+int main() {
+    int disk[100] = {0}; // 0 = free, 1 = occupied
+    int start[10], length[10], n, i, j;
+
+    printf("Enter number of files: ");
+    scanf("%d", &n);
+
+    for (i = 0; i < n; i++) {
+        printf("\nEnter start block and length for file %d: ", i + 1);
+        scanf("%d %d", &start[i], &length[i]);
+
+        int free = 1;
+        for (j = start[i]; j < start[i] + length[i]; j++) {
+            if (disk[j] == 1) {
+                free = 0;
+                break;
+            }
+        }
+
+        if (free) {
+            for (j = start[i]; j < start[i] + length[i]; j++) {
+                disk[j] = 1;
+            }
+            printf("File %d allocated.\n", i + 1);
+        } else {
+            printf("File %d not allocated. Blocks not free.\n", i + 1);
+            start[i] = -1; // mark as not allocated
+        }
+    }
+
+    // Output table
+    printf("\n\nFile Allocation Table : ");
+    printf("\nFile\tStart\tLength\tBlocks\n");
+    for (i = 0; i < n; i++) {
+        if (start[i] != -1) {
+            printf("%d\t%d\t%d\t", i + 1, start[i], length[i]);
+            for (j = 0; j < length[i]; j++) {
+                printf("%d ", start[i] + j);
+            }
+            printf("\n");
+        }
+    }
+
+    return 0;
+}
+
